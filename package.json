@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "bun test"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.6",
