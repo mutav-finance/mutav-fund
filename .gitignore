@@ -1,0 +1,29 @@
+node_modules/
+.env
+.env.*
+!.env.example
+local.env
+.DS_Store
+*.log
+
+# Next.js
+.next/
+out/
+build/
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Bun
+bun.lockb
+
+# Editor
+.vscode/
+.idea/
+
+# Claude (local config)
+.claude/
