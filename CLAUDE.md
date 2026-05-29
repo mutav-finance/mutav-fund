@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # MUTAV Invest — Agent Context
 
 ## Project
