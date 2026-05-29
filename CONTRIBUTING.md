@@ -1,4 +1,4 @@
-# Contributing to mutav-invest
+# Contributing to mutav-fund
 
 Thanks for your interest in contributing.
 
@@ -8,13 +8,13 @@ The protocol-wide branch workflow, commit-message conventions, and PR review pro
 
 - **General CONTRIBUTING:** https://github.com/mutav-finance/mutav/blob/main/CONTRIBUTING.md
 
-This file documents only `mutav-invest`-specific notes. If anything below conflicts with the canonical doc, prefer the canonical doc and open an issue here.
+This file documents only `mutav-fund`-specific notes. If anything below conflicts with the canonical doc, prefer the canonical doc and open an issue here.
 
 ## Setup
 
 ```bash
-git clone https://github.com/mutav-finance/mutav-invest.git
-cd mutav-invest
+git clone https://github.com/mutav-finance/mutav-fund.git
+cd mutav-fund
 bun install
 bun run dev
 ```
@@ -35,7 +35,13 @@ bun run dev
 
 ## Boundary rule
 
-This repo is the public investor surface — it holds **no operator or admin keys**. All transaction signing happens client-side via the user's Stellar wallet. If you find yourself needing to store a server-side key, the work belongs on `mutav-stellar` instead.
+This repo is the web3 portal — both investor flows and fund management. It holds **no operator or admin keys server-side**. All transaction signing happens client-side via the user's Stellar wallet (investors with their own wallets; admin via hardware wallet through wallet kit).
+
+If you find yourself needing to store a server-side key, the work belongs on `mutav-stellar`.
+
+## Admin UI gating
+
+Admin features (fund management) should be gated by an on-chain check against the contract's `admin()` view — not by client-side state alone. The same dapp serves both audiences; UI affordances flow from the connected wallet's identity.
 
 ## Reporting issues
 

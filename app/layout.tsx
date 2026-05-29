@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MUTAV Invest",
+  title: "MUTAV Fund",
   description:
-    "Investor portal for MUTAV Finance — fund data, NAV view, deposit and redeem flows.",
+    "Web3 portal for the MUTAV fund — investor flows and fund management.",
 };
 
 export default function RootLayout({
