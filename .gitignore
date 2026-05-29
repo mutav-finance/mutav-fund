@@ -29,3 +29,6 @@ bun.lockb
 .claude/settings.local.json
 .claude/worktrees/
 .claude/scheduled_tasks.lock
+
+# Codex agent runtime (not used; sibling of .claude installed by stellar-build)
+.codex/
