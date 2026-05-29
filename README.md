@@ -1,36 +1,49 @@
-# MUTAV Invest — Investor Portal
+# MUTAV Fund — Web3 Portal
 
-Public-facing investor portal for MUTAV Finance: fund data, NAV view, deposit / request-redemption / claim flows. Signs client-side via Stellar wallet.
+Web3-native portal for the MUTAV fund. Serves both audiences who interact with the fund via wallet-signed transactions:
 
-> *Portal do investidor MUTAV: dados do fundo, NAV, fluxos de aporte/resgate/reivindicação. Assinatura via carteira Stellar.*
+- **Investors** — deposit USDC, request redemption, claim, view NAV / portfolio / transparency.
+- **Protocol team (admin)** — manage the fund: AUM dashboard, partner whitelist, parameter changes, `cover_default`, paused state, admin handover.
+
+All signing happens client-side via the user's Stellar wallet. The portal holds **no operator or admin keys server-side**.
+
+> *Portal web3 nativo do MUTAV — investidores aportam/resgatam e o time de protocolo gere o fundo, tudo via assinatura de carteira do usuário. Nenhuma chave de operador/admin server-side.*
 
 ## Scope
 
-This repo is the **investor-facing dApp** in MUTAV's three-repo split. It holds **no operator or admin keys** — all signing happens client-side via the user's wallet.
+### Investor surface (public)
+- Fund overview: NAV, AUM, yield history, transparency feed
+- Deposit / request redemption / cancel / fulfill / reclaim
+- Account view: investor balance, pending and ready redemption state
+- KYC / onboarding (if/when required by jurisdiction)
 
-- **Fund data view** — NAV, AUM, yield history, fund overview
-- **Investor flows** — deposit, request redemption, cancel, fulfill, reclaim
-- **Account view** — investor balance, pending redemption status
-- **KYC / onboarding** — if/when required by jurisdiction
+### Fund-management surface (admin, wallet-gated)
+- Dashboard: AUM, NAV, total supply, paused state, weekly cap utilization, queue depth, ready-redemption inventory
+- Partner whitelist: `set_approved_partner`, view current set
+- Parameter changes: `set_*_bps` (mgmt, exit cap, protocol, redemption fees), `set_fulfill_window`, `set_classic_wallet` (two-step once #32 lands)
+- Defaults: `cover_default` with destination + amount
+- Pause toggle
+- Admin handover: `propose_admin` / `accept_admin`
+- Read-only observability: recent on-chain events, daemon health (when the indexer #44 lands)
 
 ## The three-repo split
 
 ```mermaid
 flowchart LR
-  STL[mutav-stellar<br/>contracts, SDK, daemons<br/>audited; slow cadence]
-  APP[mutav-app<br/>real-estate platform<br/>Auth0 + Convex]
-  INV[mutav-invest<br/>investor portal<br/>this repo]
+  STL[mutav-stellar<br/>contracts, SDK, daemons<br/>audited surface]
+  APP[mutav-app<br/>agency platform<br/>Auth0 + Convex]
+  FUND[mutav-fund<br/>web3 portal<br/>this repo]
   APP -->|consumes SDK| STL
-  INV -->|consumes SDK| STL
+  FUND -->|consumes SDK| STL
 ```
 
 | Repo | Role |
 |---|---|
-| [`mutav-finance/mutav-stellar`](https://github.com/mutav-finance/mutav-stellar) | Stellar contracts + TS SDK + operator infrastructure. The audited surface. |
-| [`mutav-finance/mutav-app`](https://github.com/mutav-finance/mutav-app) | Real-estate platform (Auth0 + Convex) for agencies. |
-| **`mutav-finance/mutav-invest`** (this repo) | Investor portal — public dApp. |
+| [`mutav-finance/mutav-stellar`](https://github.com/mutav-finance/mutav-stellar) | Stellar contracts + TS SDK + operator infrastructure. Audited surface. |
+| [`mutav-finance/mutav-app`](https://github.com/mutav-finance/mutav-app) | Agency platform (Auth0 + Convex) — agency dashboards, rental contracts, payment collection, SEP-24 anchor (Etherfuse). |
+| **`mutav-finance/mutav-fund`** (this repo) | Web3 portal — investor flows + fund management. Wallet-signed throughout. |
 
-`mutav-invest` consumes the `@mutav-finance/mutav-stellar` SDK to read on-chain state and submit user-signed transactions. No server-side operator/admin keys.
+`mutav-fund` consumes the `@mutav-finance/mutav-stellar` SDK to read on-chain state and construct transactions for wallet signing. No server-side keys.
 
 Architecture docs live in `mutav-stellar/docs/architecture/`.
 
@@ -40,13 +53,13 @@ Architecture docs live in `mutav-stellar/docs/architecture/`.
 - **Bun** — package manager + scripts
 - **Stellar SDK** + **wallet kit** (TBD: Freighter / Albedo / stellar-wallets-kit) — chain interaction + signing
 
-Hosting: Vercel (likely) — Next.js, edge-friendly, fits Vercel ecosystem skills.
+Hosting: Vercel.
 
 ## Setup
 
 ```bash
-git clone https://github.com/mutav-finance/mutav-invest.git
-cd mutav-invest
+git clone https://github.com/mutav-finance/mutav-fund.git
+cd mutav-fund
 bun install
 bun run dev
 ```
@@ -55,7 +68,7 @@ Visit http://localhost:3000.
 
 ## Related tools
 
-[**stellar-build**](https://web-nine-umber-74.vercel.app/) — community CLI that bundles 42 Stellar-focused Claude skills (Soroban, dApp patterns, SCF grant submission, security review) plus 6 named personas. Recommended for Soroban/Stellar agent workflows.
+[**stellar-build**](https://web-nine-umber-74.vercel.app/) — community CLI bundling 42 Stellar-focused Claude skills + 6 personas. Recommended for Soroban/Stellar agent workflows.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/kaankacar/stellar-build/main/install.sh | bash
