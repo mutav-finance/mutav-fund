@@ -53,6 +53,14 @@ bun run dev
 
 Visit http://localhost:3000.
 
+## Related tools
+
+[**stellar-build**](https://web-nine-umber-74.vercel.app/) — community CLI that bundles 42 Stellar-focused Claude skills (Soroban, dApp patterns, SCF grant submission, security review) plus 6 named personas. Recommended for Soroban/Stellar agent workflows.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kaankacar/stellar-build/main/install.sh | bash
+```
+
 ## License
 
 Apache-2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).

@@ -25,5 +25,7 @@ bun.lockb
 .vscode/
 .idea/
 
-# Claude (local config)
-.claude/
+# Claude (local-only — committed skills tree comes via mirror from mutav-app)
+.claude/settings.local.json
+.claude/worktrees/
+.claude/scheduled_tasks.lock
