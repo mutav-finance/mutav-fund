@@ -29,6 +29,14 @@ Scope:
 
 This repo consumes the `@mutav-finance/mutav-stellar` SDK. Contract reference + architecture docs live in `mutav-stellar/docs/architecture/`.
 
+## Terminology (overloaded across repos)
+
+When you write or read code in this repo, the smart-contract / on-chain sense always applies:
+
+- **contract** = the Soroban `Fund` smart contract on `mutav-stellar` (consumed via the SDK). On `mutav-app` the word means a **rental contract** — the lease agreement between an agency and a tenant. The two are unrelated.
+- **admin** = the Stellar admin keypair on the contract (a connected wallet whose pubkey matches the contract's `admin()` view). On `mutav-app` "admin" means an Auth0 staff role with no chain authority.
+- **operator**, **treasury**, **fund** are single-sense. Full table in `mutav-stellar/docs/architecture/01-protocol-overview.md#terminology`.
+
 ## Audience-gated UI
 
 The same dapp serves both audiences; admin features should be gated by wallet-address check against the contract's `admin()` view. Don't trust client-side state for the gating; always re-check via the contract.
