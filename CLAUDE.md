@@ -2,6 +2,8 @@
 
 # MUTAV Fund — Agent Context
 
+> **⚠️ Soft-deprecated (2026-05-30).** This repo folds into [`mutav-finance/mutav-app`](https://github.com/mutav-finance/mutav-app) `apps/fund/` as part of the Turborepo monorepo migration ([planning ask](https://github.com/mutav-finance/mutav-app/issues/139), [protocol decision](https://github.com/mutav-finance/mutav-stellar/issues/57), [policy](https://github.com/mutav-finance/mutav-fund/issues/11)). Until the migration lands, the repo stays functional — but **no new features here**: open them against `mutav-app` instead. Only critical fixes (security, broken build, dependency vulns) land in this repo. Archive happens after `apps/fund/` reaches feature parity, not before.
+
 ## Project
 
 MUTAV — onchain rental guarantee infrastructure.
@@ -19,13 +21,13 @@ Scope:
 - Investor views (deposit / redeem / NAV / portfolio / KYC if required)
 - Fund-management views (admin dashboard, partner mgmt, parameter changes, `cover_default`, pause toggle, admin handover)
 
-## Three-repo split
+## Repo position (historical — see soft-deprecation note above)
 
-- `mutav-finance/mutav-stellar`: Stellar contracts + TS SDK + operator daemons. The audited surface; operator-key custody.
-- `mutav-finance/mutav-app`: agency platform (Auth0 + Convex) — agency dashboards, rental contracts, payment collection, SEP-24 anchor integration (Etherfuse).
-- **`mutav-finance/mutav-fund`** (this repo): web3 portal — investor flows + fund management. Wallet-signed throughout.
+- `mutav-finance/mutav-stellar`: Stellar contracts + TS SDK. The audited surface. (Operator-daemon code has been removed from scope per [#57](https://github.com/mutav-finance/mutav-stellar/issues/57); operator key moves to a KMS-backed Convex Action on `mutav-app`.)
+- `mutav-finance/mutav-app`: agency platform today; **the future home of this repo's content** as `apps/fund/` under a Turborepo monorepo.
+- **`mutav-finance/mutav-fund`** (this repo): web3 portal — investor flows + fund management. Wallet-signed throughout. **Soft-deprecated** pending the fold-in.
 
-**Boundary rule**: this repo holds NO operator or admin keys. All transaction signing is client-side via the user's wallet. If you find yourself needing to store a server-side key, the work belongs on `mutav-stellar`.
+**Boundary rule** (still applies while this repo is alive): this repo holds NO operator or admin keys. All transaction signing is client-side via the user's wallet.
 
 This repo consumes the `@mutav-finance/mutav-stellar` SDK. Contract reference + architecture docs live in `mutav-stellar/docs/architecture/`.
 
