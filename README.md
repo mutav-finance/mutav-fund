@@ -1,5 +1,7 @@
 # MUTAV Fund — Web3 Portal
 
+> **⚠️ Soft-deprecated (2026-05-30).** This repo folds into [`mutav-finance/mutav-app`](https://github.com/mutav-finance/mutav-app) `apps/fund/` as part of the Turborepo monorepo migration ([planning ask](https://github.com/mutav-finance/mutav-app/issues/139), [protocol decision](https://github.com/mutav-finance/mutav-stellar/issues/57), [policy](https://github.com/mutav-finance/mutav-fund/issues/11)). Until the migration lands, the repo stays functional — but **no new features here**: open them against `mutav-app` instead. Only critical fixes land in this repo. Archive happens after `apps/fund/` reaches feature parity, not before.
+
 Web3-native portal for the MUTAV fund. Serves both audiences who interact with the fund via wallet-signed transactions:
 
 - **Investors** — deposit USDC, request redemption, claim, view NAV / portfolio / transparency.
@@ -26,22 +28,23 @@ All signing happens client-side via the user's Stellar wallet. The portal holds 
 - Admin handover: `propose_admin` / `accept_admin`
 - Read-only observability: recent on-chain events, daemon health (when the indexer #44 lands)
 
-## The three-repo split
+## Repo position (historical — see soft-deprecation note above)
 
 ```mermaid
 flowchart LR
-  STL[mutav-stellar<br/>contracts, SDK, daemons<br/>audited surface]
-  APP[mutav-app<br/>agency platform<br/>Auth0 + Convex]
-  FUND[mutav-fund<br/>web3 portal<br/>this repo]
+  STL[mutav-stellar<br/>Fund contract + SDK<br/>audited surface]
+  APP[mutav-app<br/>Turborepo monorepo<br/>apps/* + Mutav API]
+  FUND[mutav-fund<br/>web3 portal<br/>this repo — folding into apps/fund/]
   APP -->|consumes SDK| STL
   FUND -->|consumes SDK| STL
+  FUND -.fold-in.-> APP
 ```
 
 | Repo | Role |
 |---|---|
-| [`mutav-finance/mutav-stellar`](https://github.com/mutav-finance/mutav-stellar) | Stellar contracts + TS SDK + operator infrastructure. Audited surface. |
-| [`mutav-finance/mutav-app`](https://github.com/mutav-finance/mutav-app) | Agency platform (Auth0 + Convex) — agency dashboards, rental contracts, payment collection, SEP-24 anchor (Etherfuse). |
-| **`mutav-finance/mutav-fund`** (this repo) | Web3 portal — investor flows + fund management. Wallet-signed throughout. |
+| [`mutav-finance/mutav-stellar`](https://github.com/mutav-finance/mutav-stellar) | Fund contract (Soroban/Rust) + TS SDK. Audited surface. (Operator daemons removed from scope per [`#57`](https://github.com/mutav-finance/mutav-stellar/issues/57); operator runtime moves to KMS-backed Convex Actions on `mutav-app`.) |
+| [`mutav-finance/mutav-app`](https://github.com/mutav-finance/mutav-app) | Turborepo monorepo: persona apps + Mutav API (Convex). **The future home of this repo's content** as `apps/fund/`. |
+| **`mutav-finance/mutav-fund`** (this repo) | Web3 portal — investor flows + fund management. **Soft-deprecated** pending the fold-in. |
 
 `mutav-fund` consumes the `@mutav-finance/mutav-stellar` SDK to read on-chain state and construct transactions for wallet signing. No server-side keys.
 
